@@ -1,0 +1,4 @@
+# Due to Bug #14382, GHC 8.2.2 does not work with gi-gtk.
+resolver: lts-9.21
+packages:
+- .
