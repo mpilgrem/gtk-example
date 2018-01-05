@@ -129,16 +129,6 @@ type family FindElement (m :: Symbol) (ms :: [(Symbol, *)])
   FindElement m ('(m', o) ': ms) typeError = FindElement m ms typeError
 ```
 
-```haskell
-ResolveButtonMethod "setLabel" o = ButtonSetLabelMethodInfo
-
-instance (signature ~ (Text -> m ()), MonadIO m, IsButton a) => MethodInfo ButtonSetLabelMethodInfo a signature where
-  overloadedMethod _ = buttonSetLabel
-
-instance (info ~ ResolveButtonMethod t Button, MethodInfo info Button p) => IsLabel t (Button -> p) where
-  fromLabel _ = overloadedMethod (MethodProxy :: MethodProxy info)
-```
-
 ### OverloadedLabels
 Package `base` exposes module `GHC.OverloadedLabels` which defines a class:
 
@@ -158,6 +148,13 @@ by the context.
 
 This makes use of kind signatures, type-level literals and visibile type
 application.
+
+Module `Data.GI.Base.Attributes` defines an instance of class `IsLabel`:
+
+```haskell
+instance a ~ x => IsLabel x (AttrLabelProxy a) where
+  fromLabel _ = AttrLabelProxy
+```
 
 ### KindSignatures
 The `KindSignatures` extension enables kind signatures in class declarations.
