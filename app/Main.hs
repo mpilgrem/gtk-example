@@ -9,11 +9,8 @@ module Main
     main
   ) where
 
--- package haskell-gi-base
-import Data.GI.Base.Attributes (AttrOp ((:=)), set)
-import Data.GI.Base.Constructible (Constructible (new))
-import Data.GI.Base.Signals (on)
 -- package gi-gtk
+import GI.Gtk (AttrOp ((:=)), new, on, set)
 import GI.Gtk.Functions (mainQuit)
 import qualified GI.Gtk.Functions as Gtk (init, main)
 import GI.Gtk.Objects.Button (Button (Button))

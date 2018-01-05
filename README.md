@@ -57,9 +57,87 @@ specify a `resolver` that uses GHC 8.0.2.
 
 ## Overloaded Labels
 
-`haskell-gi` has extensive support for overloading, using the
-`OverloadedLabels` extension introduced in GHC 8.0.
+`haskell-gi` supports overloading, using the `OverloadedLabels` extension
+introduced in GHC 8.0.
 <https://github.com/haskell-gi/haskell-gi/wiki/Overloading>
+
+For example:
+
+```haskell
+button <- new Button [ buttonLabel := "Click me" ]
+```
+can be replaced by:
+
+```haskell
+button <- new Button [ #label := "Click me" ]
+```
+
+`new` is a method of class `Constructible` with signature:
+
+```haskell
+class Constructible a (tag :: AttrOpTag) where
+  new :: MonadIO m => (ManagedPtr a -> a) -> [AttrOp a tag] -> m a
+```
+
+and there is an instance:
+
+```haskell
+instance (GObject a, tag ~ 'AttrConstruct) => Constructible a tag where
+  new = constructGObject
+```
+
+The module `GI.Gtk.Objects.Button` exports `buttonLabel`, which is a value of
+type `AttrLabelProxy "label"`:
+
+```haskell
+buttonLabel :: AttrLabelProxy "label"
+buttonLabel = AttrLabelProxy
+```
+
+where `"label"` is a type-level string literal of kind `Symbol`.
+
+The module `Data.GI.Base.Attributes` exports `(:=)`, a constructor of a
+generalised algebraic data type:
+
+```haskell
+data AttrOp obj (tag :: AttrOpTag) where
+  (:=) :: (HasAttributeList obj,
+          info ~ ResolveAttribute attr obj,
+          AttrInfo info,
+          AttrBaseTypeConstraint info obj,
+          AttrOpAllowed tag info obj,
+          (AttrSetTypeConstraint info) b)
+       => AttrLabelProxy (attr :: Symbol) -> b -> AttrOp obj tag
+```
+
+`ResolveAttribute "label" Button` equates to `ButtonLabelPropertyInfo`:
+
+```haskell
+type instance AttributeList Button = ButtonAttributeList
+type ButtonAttributeList = ('[ ... '("label", ButtonLabelPropertyInfo) ... ])
+
+type family ResolveAttribute (s :: Symbol) (o :: *) :: * where
+  ResolveAttribute s o
+    = FindElement s (AttributeList o)
+      (UnknownAttribute "Error: could not find attribute" s "for object" o)
+
+type family FindElement (m :: Symbol) (ms :: [(Symbol, *)])
+  (typeError :: ErrorMessage)
+  :: * where
+  FindElement m '[] typeError = TypeError typeError
+  FindElement m ('(m, o) ': ms) typeError = o
+  FindElement m ('(m', o) ': ms) typeError = FindElement m ms typeError
+```
+
+```haskell
+ResolveButtonMethod "setLabel" o = ButtonSetLabelMethodInfo
+
+instance (signature ~ (Text -> m ()), MonadIO m, IsButton a) => MethodInfo ButtonSetLabelMethodInfo a signature where
+  overloadedMethod _ = buttonSetLabel
+
+instance (info ~ ResolveButtonMethod t Button, MethodInfo info Button p) => IsLabel t (Button -> p) where
+  fromLabel _ = overloadedMethod (MethodProxy :: MethodProxy info)
+```
 
 ### OverloadedLabels
 Package `base` exposes module `GHC.OverloadedLabels` which defines a class:
