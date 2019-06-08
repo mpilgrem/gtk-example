@@ -1,0 +1,28 @@
+name:        gtk-example
+version:     '0.1.0.0'
+synopsis:    Example use of GTK
+description: Please see the README on Github at <https://github.com/mpilgrem/gtk-example#readme>
+author:      Mike Pilgrem
+maintainer:  public@pilgrem.com
+copyright:   2017-2019 Mike Pilgrem. All rights reserved.
+license:     BSD3
+github:      mpilgrem/gtk-example
+
+extra-source-files:
+- ChangeLog.md
+- README.md
+
+ghc-options:
+- -threaded
+- -rtsopts
+- -Wall
+- -with-rtsopts=-N
+
+dependencies:
+- base >=4.7 && <5
+- gi-gtk
+
+executables:
+  gtk-example:
+    main: Main.hs
+    source-dirs: app

@@ -1,3 +1,11 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 50c8c0e973a1d9b59b27ca37759dfbd2c25d2c597cbdc43012e49bc5b3d20a79
+
 name:           gtk-example
 version:        0.1.0.0
 synopsis:       Example use of GTK
@@ -6,12 +14,10 @@ homepage:       https://github.com/mpilgrem/gtk-example#readme
 bug-reports:    https://github.com/mpilgrem/gtk-example/issues
 author:         Mike Pilgrem
 maintainer:     public@pilgrem.com
-copyright:      2017 Mike Pilgrem. All rights reserved.
+copyright:      2017-2019 Mike Pilgrem. All rights reserved.
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
-
 extra-source-files:
     ChangeLog.md
     README.md
@@ -22,12 +28,12 @@ source-repository head
 
 executable gtk-example
   main-is: Main.hs
+  other-modules:
+      Paths_gtk_example
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -Wall -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , gi-gtk
-  other-modules:
-      Paths_gtk_example
   default-language: Haskell2010

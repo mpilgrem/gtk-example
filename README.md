@@ -52,8 +52,9 @@ cd gtk-example
 ```
 
 6. A [bug in GHC 8.2.2](https://ghc.haskell.org/trac/ghc/ticket/14382) means
-that it does not work with package `gi-gtk`. Edit the `stack.yaml` file to
-specify a `resolver` that uses GHC 8.0.2.
+that it does not work with package `gi-gtk`. If necessary, edit the `stack.yaml`
+file to specify a `resolver` that uses other than GHC 8.2.2 (eg GHC 8.0.2 or
+GHC 8.6.5).
 
 ## Overloaded Labels
 
